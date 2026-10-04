@@ -2492,9 +2492,6 @@ async def websocket_endpoint(
         await websocket.close(code=1008, reason="Invalid path parameter")
         return
 
-    requested_workflow_name = workflow_name
-    workflow_name = _resolve_requested_workflow_name(workflow_name)
-
     ws_user = await authenticate_websocket_with_path_binding(
         websocket,
         path_user_id=user_id,
@@ -2548,6 +2545,13 @@ async def websocket_endpoint(
             await websocket.close(code=1011, reason="Failed to prepare ask session")
         finally:
             _ask_session_registry.remove_session(ask_ws_id)
+        return
+
+    requested_workflow_name = workflow_name
+    try:
+        workflow_name = _resolve_requested_workflow_name(workflow_name)
+    except HTTPException:
+        await websocket.close(code=WS_CLOSE_POLICY_VIOLATION, reason="Workflow not found")
         return
 
     try:

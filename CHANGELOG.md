@@ -210,6 +210,15 @@ This project follows a practical pre-1.0 changelog format:
 
 ### Fixed
 
+- Restored the assistant launcher on declared app home pages and other custom
+  routes, while keeping it hidden on full chat pages, declared chat aliases and
+  sign-in surfaces. The widget uses the app's name and offers workflow access
+  only when a resumable session or declared start page exists. Standalone Ask
+  connections work in apps without workflows. Saved widget conversations load
+  through the authenticated transcript API before queued input is sent, with
+  explicit history/connection retry and app/user isolation. New conversations
+  use the server acknowledgement instead of a fabricated local ID.
+
 - A copied `.env.example` now imports the hosts and points the local shell's
   API proxy at the backend; `mozaiks context index` passes its workspace key.
 - Exported app requirements now pin Mozaiks to the version that built the app

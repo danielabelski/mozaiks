@@ -24,31 +24,7 @@ import { useTheme } from '../styles/useTheme';
 import { getChatBackgroundSrc } from '../styles/brandAssets';
 import { getUserRoles, roleMatches } from '../navigation/shellActions';
 import { safeReturnPath } from '../auth/authAdapter.js';
-
-/**
- * Core routes that are ALWAYS mounted — not driven by owner manifests.
- * Only ChatPage is a true core route. All platform modules/adapters
- * (including AdminPortal) are registered through explicit extension barrels and routed
- * through navigation entries.
- */
-const CORE_ROUTES = [
-  {
-    path: '/',
-    component: 'ChatPage',
-    meta: { title: 'Chat', requiresAuth: true },
-  },
-  {
-    // Wildcard so /chat/:appId/:workflow also matches
-    path: '/chat/*',
-    component: 'ChatPage',
-    meta: { title: 'Chat', requiresAuth: true },
-  },
-  {
-    path: '/app/*',
-    component: 'ChatPage',
-    meta: { title: 'Chat', requiresAuth: true },
-  },
-];
+import { getShellRoutes } from '../navigation/shellRoutes';
 
 const resolveRouteAppId = (config, user) => {
   return (
@@ -513,7 +489,7 @@ const RouteWrapper = ({
 /**
  * RouteRenderer Component
  *
- * Always mounts core shell routes (ChatPage).
+ * Mounts core chat routes, with a root fallback when no app root is declared.
  * Module/adapter routes (AdminPortal etc.) come from backend navigation.
  * Extra routes from backend-composed navigation are appended after.
  * All routes require auth by default; opt out with meta.requiresAuth: false.
@@ -533,10 +509,11 @@ const RouteRenderer = ({
 }) => {
   const { pages, loading, landing_spot } = useNavigation();
   const landingSpot = landing_spot || '/';
+  const { coreRoutes, pageRoutes } = useMemo(() => getShellRoutes(pages), [pages]);
 
-  // Build core route elements (always present)
+  // Build core chat route elements after resolving any declared app root.
   const coreRouteElements = useMemo(() => {
-    return CORE_ROUTES.map((route, index) => {
+    return coreRoutes.map((route, index) => {
       const { path, component: componentName } = route;
       if (!hasComponent(componentName)) {
         console.warn(`⚠️ [RouteRenderer] Core component "${componentName}" not found in registry for route "${path}"`);
@@ -560,19 +537,11 @@ const RouteRenderer = ({
         />
       );
     }).filter(Boolean);
-  }, [isAuthenticated, onAuthRequired, LoadingFallback]);
+  }, [coreRoutes, isAuthenticated, onAuthRequired, LoadingFallback]);
 
   // Build extra route elements from backend-composed navigation (beyond core shell)
   const extraRouteElements = useMemo(() => {
-    // Pages need at least a path; transition/workflow routes don't require a component.
-    const routablePages = (pages || []).filter(p => p.path && (p.component || p.transition || p.workflow));
-    if (routablePages.length === 0) return [];
-
-    // Filter out any pages that overlap with core paths (safety net)
-    const corePaths = new Set(CORE_ROUTES.map(r => r.path));
-    const extraRoutes = routablePages.filter(r => !corePaths.has(r.path));
-
-    return extraRoutes.map((route, index) => {
+    return pageRoutes.map((route, index) => {
       const { path, component: componentName, transition, workflow } = route;
 
       // Transition routes — no registered component needed; TransitionScreen handles rendering.
@@ -670,7 +639,7 @@ const RouteRenderer = ({
           />
       );
     });
-  }, [pages, isAuthenticated, onAuthRequired, LoadingFallback]);
+  }, [pageRoutes, isAuthenticated, onAuthRequired, LoadingFallback]);
 
   // Show loading state while navigation config is loading
   if (loading) {
