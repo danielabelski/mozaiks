@@ -234,6 +234,10 @@ This project follows a practical pre-1.0 changelog format:
 
 ### Fixed
 
+- AgentGenerator interview questions and confirmations now appear in chat.
+  Its startup guidance consistently uses typed readiness instead of routing
+  markers or instructions that contradict the required structured output.
+
 - A copied `.env.example` now imports the hosts and points the local shell's
   API proxy at the backend; `mozaiks context index` passes its workspace key.
 - Exported app requirements now pin Mozaiks to the version that built the app
