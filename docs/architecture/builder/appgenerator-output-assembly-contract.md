@@ -344,6 +344,18 @@ by existing materializers: the pack ID, its declared `surface_id`, and
 page task may use the structural scope `page_bundle` with type `page_bundle`,
 kind `ui_only`, and a null capability ID when approved ExperienceSpec pages
 exist. This scope never authorizes a capability or module task.
+An approved `ui_only` surface also retains its realization kind when its ID is
+reused by a proposed capability or task. Naming that surface does not authorize
+backend module work. Review rejects that mismatch before repairs or scheduling,
+and returns guidance to retain the approved browser behavior in `page_bundle`
+work. It does not silently remove requirements or create a provider for them.
+An app with only UI behavior and no selected provider can keep
+`capability_packs: []`; its page task uses a null capability ID. DesignDocs
+`source_capability_packs` values are descriptive category hints, not provider
+bindings. The existing data-contract serializer remains required when the
+approved data contract calls for it; UI-only scope does not authorize new
+persistent entities. Unsupported page behavior needs an upstream contract
+repair rather than an invented module or provider.
 What a page task owns determines that scope. Before the surface check, a
 `page_bundle` task with a null capability ID that owns at least one path, every
 one an approved page artifact (an approved page file or `app.json`), is labelled

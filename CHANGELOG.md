@@ -234,6 +234,11 @@ This project follows a practical pre-1.0 changelog format:
 
 ### Fixed
 
+- App planning rejects backend module work attached to an approved UI-only
+  surface before scheduling it. Planning guidance allows browser-only apps
+  without capability packs and distinguishes category hints from registered
+  providers while preserving the requested page behavior.
+
 - A copied `.env.example` now imports the hosts and points the local shell's
   API proxy at the backend; `mozaiks context index` passes its workspace key.
 - Exported app requirements now pin Mozaiks to the version that built the app

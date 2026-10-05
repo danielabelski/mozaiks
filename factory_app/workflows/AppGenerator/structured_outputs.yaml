@@ -700,7 +700,7 @@ models:
       source_capability_packs:
         type: optional_list
         items: str
-        description: Capability-pack hints this surface realizes, preserved from DesignDocs surface_map.
+        description: Descriptive category hints preserved from DesignDocs surface_map. These are not selected provider bindings and grant no module or provider authority.
       label:
         type: str
         description: Human-readable surface label.
@@ -954,7 +954,7 @@ models:
         variants:
         - str
         - 'null'
-        description: Capability pack this task belongs to. Null only for truly cross-cutting setup work.
+        description: Capability pack this task belongs to. Null for approved page_bundle work and cross-cutting tasks such as the required data-contract serializer. Do not invent a capability merely to fill this field.
       surface_id:
         type: str
         description: >
@@ -1246,7 +1246,7 @@ models:
       capability_packs:
         type: optional_list
         items: AppCapabilityPack
-        description: Canonical product capability packs selected before deriving pages, entities, and build tasks.
+        description: Canonical product capability packs selected before deriving pages, entities, and build tasks. An app with only approved ui_only behavior and no selected provider may use an empty list; category hints do not create provider bindings.
       readiness_profile:
         type: literal
         values:
