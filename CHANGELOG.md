@@ -820,6 +820,10 @@ This project follows a practical pre-1.0 changelog format:
   renderer as standalone app saves.
 - AG2 knowledge-store writes are serialized per session so a delayed earlier
   snapshot cannot overwrite the active channel state needed after restart.
+- App planning rejects backend module work attached to an approved UI-only
+  surface before scheduling it. Planning guidance allows browser-only apps
+  without capability packs and distinguishes category hints from registered
+  providers while preserving the requested page behavior.
 
 - Chat replies arriving together or immediately after a server restart now
   reach the existing workflow channel instead of being saved without delivery.
