@@ -46,6 +46,9 @@ This project follows a practical pre-1.0 changelog format:
 
 ### Security
 
+- Code review loads Monaco and its workers locally, using the patched DOMPurify
+  dependency for editor markup with sanitizer hooks isolated from chat rendering.
+
 - Patched DOMPurify and source-map-js in the shipped frontend dependency locks,
   including Monaco's nested DOMPurify dependency.
 
