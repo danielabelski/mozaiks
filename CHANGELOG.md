@@ -337,6 +337,10 @@ This project follows a practical pre-1.0 changelog format:
 
 ### Fixed
 
+- App shells load their configured brand before rendering, without briefly
+  showing another theme. Chat drafts and live artifact iframes now survive
+  resizing between desktop and mobile layouts and reopening the artifact panel.
+
 - Pin shared-shell text checkouts to LF so installed Android framework resources
   have identical provenance on Windows and Linux. Binary assets stay unchanged.
 
