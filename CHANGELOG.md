@@ -341,6 +341,12 @@ This project follows a practical pre-1.0 changelog format:
 
 ### Fixed
 
+- Android delivery checks every app and workflow input before creating either
+  archive, rejects credential/developer files and obvious credential literals,
+  and restricts public brand content to the theme and supported image/font assets.
+  Ordinary delivery manifests also reject local/internal backend destinations;
+  deliberate local test origins remain confined to explicit acceptance tooling.
+
 - Pin shared-shell text checkouts to LF so installed Android framework resources
   have identical provenance on Windows and Linux. Binary assets stay unchanged.
 
