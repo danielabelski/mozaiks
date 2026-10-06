@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+from types import EllipsisType
 from typing import TYPE_CHECKING, Any
 from uuid import uuid4
 
@@ -264,6 +265,7 @@ class AppRegistryService:
         current_build_run: dict[str, Any] | None = None,
         expected_build_id: str | None = None,
         expected_lifecycle_state: str | None = None,
+        expected_active_chat_id: str | None | EllipsisType = ...,
     ) -> dict[str, Any]:
         payload = ensure_status_payload(
             build_registry_id=build_registry_id,
@@ -287,6 +289,7 @@ class AppRegistryService:
             current_build_run=payload["current_build_run"],
             expected_build_id=expected_build_id,
             expected_lifecycle_state=expected_lifecycle_state,
+            expected_active_chat_id=expected_active_chat_id,
         )
         return {"success": app is not None, "app": app}
 
