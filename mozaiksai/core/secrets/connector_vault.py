@@ -236,8 +236,8 @@ class AzureKeyVaultConnectorVaultBackend:
                 "expires_at": expires_at.isoformat(),
                 "secret_available": True,
             }
-        except Exception as exc:  # pragma: no cover - depends on Azure service
-            logger.error("Failed to store connector secret %s: %s", secret_name, exc, exc_info=True)
+        except Exception:  # pragma: no cover - depends on Azure service
+            logger.error("Failed to store connector secret %s", secret_name)
             return {
                 "success": False,
                 "provider": "azure_key_vault",
@@ -288,8 +288,8 @@ class AzureKeyVaultConnectorVaultBackend:
                 "expires_at": expires_on.isoformat() if expires_on else None,
                 "error": None if value else "Secret exists but has no value.",
             }
-        except Exception as exc:  # pragma: no cover - depends on Azure service
-            logger.error("Failed to fetch connector secret %s: %s", secret_name, exc, exc_info=True)
+        except Exception:  # pragma: no cover - depends on Azure service
+            logger.error("Failed to fetch connector secret %s", secret_name)
             return {
                 "success": False,
                 "provider": "azure_key_vault",
@@ -317,8 +317,8 @@ class AzureKeyVaultConnectorVaultBackend:
                 "secret_name": secret_name,
                 "error": None,
             }
-        except Exception as exc:  # pragma: no cover - depends on Azure service
-            logger.error("Failed to delete connector secret %s: %s", secret_name, exc, exc_info=True)
+        except Exception:  # pragma: no cover - depends on Azure service
+            logger.error("Failed to delete connector secret %s", secret_name)
             return {
                 "success": False,
                 "provider": "azure_key_vault",
@@ -503,8 +503,8 @@ class MongoConnectorVaultBackend:
                 "expires_at": expires_at.isoformat(),
                 "secret_available": True,
             }
-        except Exception as exc:
-            logger.error("MongoConnectorVaultBackend.store_secret failed: %s", exc, exc_info=True)
+        except Exception:
+            logger.error("MongoConnectorVaultBackend.store_secret failed")
             return {
                 "success": False,
                 "provider": "mongo",
@@ -531,8 +531,8 @@ class MongoConnectorVaultBackend:
             doc = await coll.find_one(
                 {"scope": scope, "scope_id": scope_id, "service": service, "secret_name": secret_name}
             )
-        except Exception as exc:
-            logger.error("MongoConnectorVaultBackend.get_secret failed: %s", exc, exc_info=True)
+        except Exception:
+            logger.error("MongoConnectorVaultBackend.get_secret failed")
             return {
                 "success": False,
                 "provider": "mongo",
@@ -573,8 +573,8 @@ class MongoConnectorVaultBackend:
                 "secret_name": secret_name,
                 "error": None if result.deleted_count > 0 else "Secret not found.",
             }
-        except Exception as exc:
-            logger.error("MongoConnectorVaultBackend.delete_secret failed: %s", exc, exc_info=True)
+        except Exception:
+            logger.error("MongoConnectorVaultBackend.delete_secret failed")
             return {
                 "success": False,
                 "provider": "mongo",
